@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asuntoesite AI - Pro & SaaS Edition</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); max-width: 700px; width: 100%; }
+        h1 { color: #1a252f; margin-bottom: 5px; }
+        p.sub { color: #7f8c8d; font-size: 14px; margin-bottom: 25px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        label { display: block; margin-top: 12px; font-weight: bold; font-size: 13px; color: #2c3e50; }
+        input, select, textarea { width: 100%; padding: 10px; margin-top: 4px; border: 1px solid #cccccc; border-radius: 6px; box-sizing: border-box; }
+        .file-box { background: #f8f9fa; padding: 15px; border: 2px dashed #cbd5e1; border-radius: 8px; margin-top: 15px; text-align: center; }
+        button { width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: bold; font-size: 15px; cursor: pointer; margin-top: 15px; } 
+        .btn-img { background-color: #8e44ad; color: white; }
+        .btn-gen { background-color: #27ae60; color: white; font-size: 17px; }
+        .btn-pdf { background-color: #2980b9; color: white; display: none; }
+        .result-box { margin-top: 20px; padding: 20px; background: #f4fbf7; border-left: 5px solid #27ae60; border-radius: 6px; white-space: pre-wrap; display: none; } 
+        .status { text-align: center; font-weight: bold; color: #e67e22; margin-top: 15px; display: none; } 
+    </style>
+</head>
+<body> 
+
+<div class="container">
+    <h1>&#127968; Asuntoesite AI Pro</h1>
+    <p class="sub">Luo hyvän välitystavan mukaiset esitteet ja analysoi asuntokuvat tekoälyllä.</p>
+    <!-- MAKSUPANEELI-->
+    <div style="background: #eef2ff; border: 1px solid #c7d2fe; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+        <h3 style="margin: 0 0 8px 0; color: #3730a3;">Tilaa Asuntoesite AI Pro</h3>
+        <p style="margin: 0 0 10px 0; font-size: 14px; color: #4338ca;">Saat käyttöösi kuva-analyysin, monikielisyyden ja rajattomat PDF-lataukset (29 &euro; / kk).</p>
+        <button onclick="ostaTilaus()" style="background-color: #4f46e5; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; width: auto;">
+            &#128179; Osta Pro-tilaus (29 &euro; / kk)
+        </button>
+    </div>
+
+    <!-- KUVAN ANALYSOINTI (VISION AI)-->
+     <div class="file-box">
+        <label for="kuva">&#128247; Valinnainen: Lataa asuntokuva (Tekoäly kuvailee huoneen automaattisesti)</label>
+        <input type="file" id="kuva" accept="image/*">
+        <button class="btn-img" onclick="analysoiKuva()"Analysoi kuva tekoälyllä &#10024;</button>
+    </div> 
+
+    <!-- SYÖTTÖLOMAKE-->
+     <label for="osoite">Osoite *</label>
+     <input type="text" id="osoite" placeholder="Esim. Lönnrotinkatu 15, Helsinki">
+
+     <div class="grid">
+        <div>
+            <label for="pinta_ala">Pinta_ala *</label>
+            <input type="text" id="pinta_ala" placeholder="Esim. 54m&sup2;">
+        </div>
+        <div>
+            <label for="huoneet">Huoneet *</label>
+            <input type="text" id="huoneet" placeholder="Esim. 2h + k + parveke">
+        </div>
+    <div>
+
+    <div class="grid">
+        <div>
+            <label for="hoitovastike">Hoitovastike</label>
+            <input type="text" id="hoitovastike" placeholder="Esim. 240 &euro;/kk">
+        <div>
+        <div>
+            <label for="energialuokka">Energialuokka</label>
+            <input type="text" id="energialuokka" placeholder="Esim. C2018">
+        <div>
+    <div>
+
+    <div class="grid">
+        <div>
+            <label for="tontti">Tontin omistus</label>
+            <select id="tontti">
+                <option value="Oma">Oma</option>
+                <option value="Vuokra">Vuokra</option>
+            </select>
+        </div>
+        <div>
+            <label for="kieli">Esitteen kieli</label>
+            <select id="kieli">
+                <option value="Suomi">Suomi</option>
+                <option value="Englanti">Englanti (English)</option>
+                <option value="Ruotsi">Ruotsi (Svenska)</option>
+            </select>
+        </div>
+    </div>
+
+    <label for="savy">Tekstin sävy / Kohderyhmä</label>
+    <select id="savy">
+        <option value="Ammattimainen ja myyvä">Ammattimainen ja myyvä (Perus)</option>
+        <option value="Sijoittajille suunnattu, painottaa tuottoa ja vuokrattavuutta">Sijoittajalle suunnattu</option>
+        <option value="Lämmin ja lapsiperheitä puhutteleva">Lapsiperheille suunnattu</option>
+        <option value="Ylellinen, arvokas ja tyylikäs">Ylellinen & Arvokas</option>
+    </select>
+
+    <label for="Lisatiedot">Erityispiirteet & Remontit (Kuvan analyysi ilmestyy myös tähän)</label>
+    <textarea id="lisatiedot" rows="4" placeholder="Esim. Kalanruotoparketti, korkeat huoneet..."></textarea>
+
+    <button class="btn-gen" onclick="generoiEsite()">Luo myyntiesite &#128640;</button>
+
+    <div class="status" id="status">Käsitellään pyyntöä... &#8987;</div>
+
+    <div class="result-box" id="tulos"></div>
+    <button class="btn-pdf" id="pdfBtn" onclick="lataaPDF()">&#128196; Lataa valmis esite PDF-tiedostona</button>
+<div>
+
+<script>
+async function ostaTilaus() {
+    try {
+        const response = await fetch('/luo-maksusessio', { method: 'POST' });
+        const data = await response.json();
+        
+        if (data.status === 'redirect') {
+            window.location.href = data.url; // Ohjaa oikealle Stripe-maksusivulle
+        } else if (data.status === 'test_mode') {
+            alert("&#127881; " + data.message); // Näyttää ilmoituksen testitilassa
+        }
+    } catch (err) {
+        alert("Virhe maksusession luonnissa.");
+    }
+}
+
+async function analysoiKuva() {
+    const kuvaInput = document.getElementById('kuva');
+    if (!kuvaInput.files[0]) {
+        alert("Valitse ensin kuva tietokoneeltasi!");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', kuvaInput.files[0]);
+
+    document.getElementById('status').style.display = 'block';
+    document.getElementById('status').innerText = 'Analysoidaan kuvaa tekoälyllä... &#128247';
+
+    try {
+        const response = await fetch('/analysoi-kuva', { method: 'POST', body: formData });
+        const data = await response.json();
+        document.getElementById('status').style.display = 'none';
+
+        if (data.kuvaus) {
+            const lisatiedot = document.getElementById('lisatiedot');
+            lisatiedot.value += (lisatiedot.value ? "\n" : "") + "Kuvakuvaus: " + data.kuvaus;
+            alert("Kuva analysoitu ja tiedot lisätty lomakkeeseen!");
+
+        }
+    } catch (err) {
+        document.getElementById('status').style.display = 'none';
+        alert("Virhe kuvan analysoinnissa.");
+    }
+}
+
+async function generoiEsite() {
+    const osoite = document.getElementById('osoite').value;
+    const pinta_ala = document.getElementById('pinta_ala').value;
+    const huoneet = document.getElementById('huoneet').value;
+
+    if (!osoite || !pinta_ala || !huoneet) {
+        alert("Täytä ainakin osoite, pinta-ala ja huoneet!");
+        return;
+    }
+
+    document.getElementById('status').style.display = 'block';
+    document.getElementById('status').innerText = 'Luodaan myyntiesitettä ja haetaan aluetietoja... &#8987;';
+    document.getElementById('tulos').style.display = 'none';
+    document.getElementById('pdfBtn').style.display = 'none';
+
+    try {
+        const response = await fetch('/luo-esite', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                osoite: osoite,
+                pinta_ala: pinta_ala,
+                huoneet: huoneet, 
+                hoitovastike: document.getElementById('hoitovastike').value,
+                energialuokka: document.getElementById('energialuokka').value,
+                tontti: document.getElementById('tontti').value,
+                kieli: document.getElementById('kieli').value,
+                savy: document.getElementById('savy').value,
+                lisatiedot: document.getElementById('lisatiedot').value 
+            })
+        });
+
+        const data = await response.json();
+        document.getElementById('status').style.display = 'none';
+
+        if (data.esite) {
+            const tulosDiv = document.getElementById('tulos');
+            tulosDiv.innerText = data.esite;
+            tulosDiv.style.display = 'block';
+            document.getElementById('pdfBtn').style.display = 'block';
+        }
+    } catch (err) {
+        document.getElementById('status').style.display = 'none';
+        alert("Virhe esitteen luonnissa.");
+    }
+}
+
+function lataaPDF() {
+    window.location.href = '/lataa-pdf';
+}
+</script>
+
+</body>
+</html>
+
+
+
